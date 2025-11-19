@@ -4,6 +4,7 @@ import pandas as pd
 import plotly.express as px
 from dotenv import load_dotenv
 import os
+from db.queries import execute_query, get_data_query
 
 # Configuração da página
 st.set_page_config(
@@ -15,3 +16,9 @@ st.set_page_config(
 # Título da aplicação
 st.title("Marketplace TCG Analytics Dashboard")
 st.markdown("Análise interativa de dados Marketplace TCG")
+
+# Carregar dados
+query = get_data_query()
+df = execute_query(query)
+if df is not None:
+    st.dataframe(df)
