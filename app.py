@@ -18,12 +18,27 @@ st.title("Marketplace TCG Analytics Dashboard")
 st.markdown("Análise interativa de dados Marketplace TCG")
 
 # Carregar dados
-query = queries.get_ticket_medio_por_forma_pagamento_query()
-df = queries.execute_query(query)
+query1 = queries.get_ticket_medio_por_forma_pagamento_query()
+df = queries.execute_query(query1)
 if df is not None:
     st.dataframe(df)
 
-query = queries.get_top_selling_products_query()
-df = queries.execute_query(query)
+query2 = queries.get_top_selling_products_query()
+df = queries.execute_query(query2)
+if df is not None:
+    st.dataframe(df)
+
+query3 = queries.get_top_artists_query()
+df = queries.execute_query(query3)
+if df is not None:
+    st.dataframe(df)
+
+query4 = queries.get_top_collections_by_unique_cards_query()
+df = queries.execute_query(query4)
+if df is not None:
+    st.dataframe(df)
+
+query5 = queries.get_price_volatility_query()
+df = queries.execute_query(query5)
 if df is not None:
     st.dataframe(df)

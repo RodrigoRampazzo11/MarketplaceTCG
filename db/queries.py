@@ -31,4 +31,31 @@ def get_top_selling_products_query():
         ORDER BY total_vendas DESC \
         LIMIT 10;"
 
+def get_top_artists_query():
+    return "SELECT c.artista, COUNT(*) AS total_cartas \
+        FROM carta c \
+        GROUP BY c.artista \
+        ORDER BY total_cartas DESC \
+        LIMIT 3;"
+
+def get_top_collections_by_unique_cards_query():
+    return "SELECT co.nome, COUNT(DISTINCT c.idproduto) AS total_cartas_unicas \
+        FROM colecao co \
+        JOIN produto p ON co.idcolecao = p.idcolecao \
+        JOIN carta c ON p.idproduto = c.idproduto \
+        GROUP BY co.nome \
+        ORDER BY total_cartas_unicas DESC \
+        LIMIT 3;"
             
+def get_price_volatility_query():
+    return "SELECT \
+        p.nome AS produto_nome, \
+        c.numeracao AS carta_numero,\
+        MAX(i.precoUnitario) - MIN(i.precoUnitario) AS diferenca_preco,\
+        STDDEV(i.precoUnitario) AS desvio_padrao\
+    FROM carta c\
+    JOIN produto p ON c.idproduto = p.idproduto\
+    JOIN item i ON p.idproduto = i.idproduto\
+    GROUP BY p.nome, c.numeracao\
+    ORDER BY diferenca_preco DESC, desvio_padrao DESC\
+    LIMIT 10;"
