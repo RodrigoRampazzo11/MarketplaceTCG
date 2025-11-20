@@ -22,7 +22,10 @@ def get_ticket_medio_por_forma_pagamento_query():
 
 def get_top_selling_products_query():
     return "SELECT p.nome, SUM(c.quantidade) AS total_vendas, \
-        CONCAT(COALESCE(CAST(cr.numeracao as TEXT), 'N/A'), ' / ', COALESCE(cl.totalcartas, 0)) AS numeracao_carta \
+        CASE  \
+            WHEN cr.numeracao IS NOT NULL THEN CONCAT(CAST(cr.numeracao AS TEXT), ' / ', COALESCE(cl.totalcartas, 0)) \
+            ELSE '' \
+        END AS numeracao_carta \
         FROM produto p \
         JOIN item i ON p.idproduto = i.idproduto \
         JOIN compra c ON i.iditem = c.iditem \

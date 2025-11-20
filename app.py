@@ -34,9 +34,12 @@ query2 = queries.get_top_selling_products_query()
 df2 = queries.execute_query(query2)
 if df2 is not None:
     # st.dataframe(df2)
-    df2['hover_info'] = df2['nome'] + ' (' + df2['numeracao_carta'] + ')'
+    df2['nome'] = df2.apply(
+        lambda row: f"{row['nome']} ({row['numeracao_carta']})" if row['numeracao_carta'] else row['nome'],
+        axis=1
+    )
     fig2 = px.bar(df2, x='nome', y='total_vendas',
-        title='Top 10 Produtos Vendidos', hover_name='hover_info',
+        title='Top 10 Produtos Vendidos', hover_name='nome',
         labels={'nome': 'Nome do Produto',
             'total_vendas': 'Total de Vendas'}
     )
