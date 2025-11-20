@@ -66,12 +66,17 @@ st.subheader("Top 10 Produtos com Maior Volatilidade de Preços")
 query5 = queries.get_price_volatility_query()
 df5 = queries.execute_query(query5)
 if df5 is not None:
-    st.dataframe(df5)
     df5['desvio_padrao'] = df5['desvio_padrao'].fillna(0)
-    fig5 = px.scatter(df5, x='produto_nome', y='diferenca_preco', size='desvio_padrao',
+    df5 = df5[df5['desvio_padrao'] > 0]
+    st.dataframe(df5)
+
+    if not df5.empty:  # Verifica se o DataFrame não está vazio após o filtro
+        fig5 = px.scatter(df5, x='produto_nome', y='diferenca_preco', size='desvio_padrao',
                       title='Volatilidade de Preços dos Produtos', hover_name='produto_nome',
                       labels={'produto_nome': 'Nome do Produto', 
                               'diferenca_preco': 'Diferença de Preço', 
                               'desvio_padrao': 'Desvio Padrão'}
-    )
-    st.plotly_chart(fig5)
+        )
+        st.plotly_chart(fig5)
+    else:
+        st.warning("Não há produtos com volatilidade de preço para exibir.")
