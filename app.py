@@ -23,7 +23,10 @@ query1 = queries.get_ticket_medio_por_forma_pagamento_query()
 df1 = queries.execute_query(query1)
 if df1 is not None:
     # st.dataframe(df1)
-    fig1 = px.bar(df1, x='formapagto', y='ticket_medio', title='Ticket Médio por Forma de Pagamento')
+    fig1 = px.bar(df1, x='formapagto', y='ticket_medio',
+        title='Ticket Médio por Forma de Pagamento',
+        labels={'formapagto': 'Forma de Pagamento', 'ticket_medio': 'Ticket Médio'}
+    )
     st.plotly_chart(fig1)
 
 st.subheader("Top 10 Produtos Vendidos")
@@ -31,7 +34,10 @@ query2 = queries.get_top_selling_products_query()
 df2 = queries.execute_query(query2)
 if df2 is not None:
     # st.dataframe(df2)
-    fig2 = px.bar(df2, x='nome', y='total_vendas', title='Top 10 Produtos Vendidos')
+    fig2 = px.bar(df2, x='nome', y='total_vendas',
+        title='Top 10 Produtos Vendidos',
+        labels={'nome': 'Nome do Produto', 'total_vendas': 'Total de Vendas'}
+    )
     st.plotly_chart(fig2)
 
 st.subheader("Top 3 Artistas")
@@ -39,7 +45,10 @@ query3 = queries.get_top_artists_query()
 df3 = queries.execute_query(query3)
 if df3 is not None:
     # st.dataframe(df3)
-    fig3 = px.bar(df3, x='artista', y='total_cartas', title='Top 3 Artistas')
+    fig3 = px.bar(df3, x='artista', y='total_cartas',
+        title='Top 3 Artistas',
+        labels={'artista': 'Artista', 'total_cartas': 'Total de Cartas'}
+    )
     st.plotly_chart(fig3)
 
 st.subheader("Top 3 Coleções por Cartas Únicas")
@@ -47,7 +56,10 @@ query4 = queries.get_top_collections_by_unique_cards_query()
 df4 = queries.execute_query(query4)
 if df4 is not None:
     # st.dataframe(df4)
-    fig4 = px.bar(df4, x='nome', y='total_cartas_unicas', title='Top 3 Coleções por Cartas Únicas')
+    fig4 = px.bar(df4, x='nome', y='total_cartas_unicas',
+        title='Top 3 Coleções por Cartas Únicas',
+        labels={'nome': 'Nome da Coleção', 'total_cartas_unicas': 'Total de Cartas Únicas'}
+    )
     st.plotly_chart(fig4)
 
 st.subheader("Top 10 Produtos com Maior Volatilidade de Preços")
@@ -57,5 +69,9 @@ if df5 is not None:
     st.dataframe(df5)
     df5['desvio_padrao'] = df5['desvio_padrao'].fillna(0)
     fig5 = px.scatter(df5, x='produto_nome', y='diferenca_preco', size='desvio_padrao',
-                      title='Volatilidade de Preços dos Produtos', hover_name='produto_nome')
+                      title='Volatilidade de Preços dos Produtos', hover_name='produto_nome',
+                      labels={'produto_nome': 'Nome do Produto', 
+                              'diferenca_preco': 'Diferença de Preço', 
+                              'desvio_padrao': 'Desvio Padrão'}
+    )
     st.plotly_chart(fig5)
