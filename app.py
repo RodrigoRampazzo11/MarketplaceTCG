@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 from dotenv import load_dotenv
 import os
-from db.queries import execute_query, get_data_query
+import db.queries as queries
 
 # Configuração da página
 st.set_page_config(
@@ -18,7 +18,12 @@ st.title("Marketplace TCG Analytics Dashboard")
 st.markdown("Análise interativa de dados Marketplace TCG")
 
 # Carregar dados
-query = get_data_query()
-df = execute_query(query)
+query = queries.get_ticket_medio_por_forma_pagamento_query()
+df = queries.execute_query(query)
+if df is not None:
+    st.dataframe(df)
+
+query = queries.get_top_selling_products_query()
+df = queries.execute_query(query)
 if df is not None:
     st.dataframe(df)
