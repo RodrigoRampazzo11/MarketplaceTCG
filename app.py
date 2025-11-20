@@ -34,9 +34,11 @@ query2 = queries.get_top_selling_products_query()
 df2 = queries.execute_query(query2)
 if df2 is not None:
     # st.dataframe(df2)
+    df2['hover_info'] = df2['nome'] + ' (' + df2['numeracao_carta'] + ')'
     fig2 = px.bar(df2, x='nome', y='total_vendas',
-        title='Top 10 Produtos Vendidos',
-        labels={'nome': 'Nome do Produto', 'total_vendas': 'Total de Vendas'}
+        title='Top 10 Produtos Vendidos', hover_name='hover_info',
+        labels={'nome': 'Nome do Produto',
+            'total_vendas': 'Total de Vendas'}
     )
     st.plotly_chart(fig2)
 
@@ -62,20 +64,24 @@ if df4 is not None:
     )
     st.plotly_chart(fig4)
 
-st.subheader("Top 10 Produtos com Maior Volatilidade de Preços")
+st.subheader("Produtos com Maior Volatilidade de Preços")
 query5 = queries.get_price_volatility_query()
 df5 = queries.execute_query(query5)
 if df5 is not None:
     df5['desvio_padrao'] = df5['desvio_padrao'].fillna(0)
-    df5 = df5[df5['desvio_padrao'] > 0]
-    st.dataframe(df5)
 
-    if not df5.empty:  # Verifica se o DataFrame não está vazio após o filtro
-        fig5 = px.scatter(df5, x='produto_nome', y='diferenca_preco', size='desvio_padrao',
-                      title='Volatilidade de Preços dos Produtos', hover_name='produto_nome',
-                      labels={'produto_nome': 'Nome do Produto', 
-                              'diferenca_preco': 'Diferença de Preço', 
-                              'desvio_padrao': 'Desvio Padrão'}
+    df5 = df5.rename(columns={
+        'produto_nome': 'Nome do Produto',
+        'carta_numero': 'Número da Carta',
+        'diferenca_preco': 'Diferença de Preço',
+        'desvio_padrao': 'Desvio Padrão'
+    })
+    st.dataframe(df5)
+    df5 = df5[df5['Desvio Padrão'] > 0]
+    if not df5.empty:
+        fig5 = px.scatter(df5, x='Nome do Produto', y='Diferença de Preço', size='Desvio Padrão',
+                      title='Volatilidade de Preços dos Produtos', hover_name='Nome do Produto',
+                      labels={'Nome do Produto', 'Diferença de Preço', 'Desvio Padrão'}
         )
         st.plotly_chart(fig5)
     else:

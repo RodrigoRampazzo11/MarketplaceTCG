@@ -21,13 +21,16 @@ def get_ticket_medio_por_forma_pagamento_query():
         GROUP BY formaPagto;"
 
 def get_top_selling_products_query():
-    return "SELECT p.nome, SUM(c.quantidade) AS total_vendas \
+    return "SELECT p.nome, SUM(c.quantidade) AS total_vendas, \
+        CONCAT(COALESCE(CAST(cr.numeracao as TEXT), 'N/A'), ' / ', COALESCE(cl.totalcartas, 0)) AS numeracao_carta \
         FROM produto p \
         JOIN item i ON p.idproduto = i.idproduto \
         JOIN compra c ON i.iditem = c.iditem \
         JOIN pedido pd ON c.idpedido = pd.idpedido \
+        LEFT JOIN carta cr ON p.idproduto = cr.idproduto \
+        LEFT JOIN colecao cl on p.idcolecao = cl.idcolecao \
         WHERE pd.statuspagto = 'Pago' \
-        GROUP BY p.nome \
+        GROUP BY p.nome, cr.numeracao, cl.totalcartas \
         ORDER BY total_vendas DESC \
         LIMIT 10;"
 
